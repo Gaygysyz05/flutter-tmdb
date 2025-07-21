@@ -1,16 +1,27 @@
-# themoviedb
+# 🎬 The Movie DB App
 
-A new Flutter project.
+Это Flutter-приложение для просмотра информации о фильмах и сериалах, основанное на [The Movie Database (TMDb)](https://www.themoviedb.org/) API.
 
-## Getting Started
+## 🚀 Функции
 
-This project is a starting point for a Flutter application.
+- Поиск фильмов и сериалов
+- Просмотр информации о фильмах: постер, описание, рейтинг
+- Раздел популярных и трендовых фильмов
+- Адаптивный UI на Flutter
+- Подключение к TMDb API
 
-A few resources to get you started if this is your first Flutter project:
+## 🧑‍💻 Технологии
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- `Flutter`
+- `Dart`
+- `Provider`
+- `HTTP`
+- TMDb API
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📦 Установка
+
+1. Клонируй репозиторий:
+
+```bash
+git clone https://github.com/твой_юзернейм/the_movie_db_app.git
+cd the_movie_db_app
