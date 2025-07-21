@@ -23,5 +23,4 @@
 1. Клонируй репозиторий:
 
 ```bash
-git clone https://github.com/твой_юзернейм/the_movie_db_app.git
-cd the_movie_db_app
+git clone https://github.com/Gaygysyz05/flutter-tmdb.git
