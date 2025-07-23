@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:themoviedb/theme/app_colors.dart';
-import 'package:themoviedb/widgets/auth/auth_widget.dart';
-import 'package:themoviedb/widgets/main/main_screen_widget.dart';
+import 'package:themoviedb/ui/theme/app_colors.dart';
+import 'package:themoviedb/ui/widgets/auth/auth_model.dart';
+import 'package:themoviedb/ui/widgets/auth/auth_widget.dart';
+import 'package:themoviedb/ui/widgets/main/main_screen_widget.dart';
+import 'package:themoviedb/ui/widgets/movie_detail/movie_details_widget.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,16 +21,27 @@ class MyApp extends StatelessWidget {
           backgroundColor: AppColors.mainDarkBlue,
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: AppColors.mainDarkBlue,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.grey
-        ),
+            backgroundColor: AppColors.mainDarkBlue,
+            selectedItemColor: Colors.white,
+            unselectedItemColor: Colors.grey),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (context) => AuthWidget(),
-        '/main': (context) => MainScreenWidget(),
+        '/': (context) => AuthProvider(
+              child: AuthWidget(),
+              model: AuthModel(),
+            ),
+        '/main': (context) => const MainScreenWidget(),
+        '/main/movie_detail': (context) {
+          final arguments = ModalRoute.of(context)?.settings.arguments;
+          if (arguments is int) {
+            return MovieDetailWidget(
+              movieId: arguments,
+            );
+          }
+          return MovieDetailWidget(movieId: 0);
+        },
       },
       initialRoute: '/',
       onUnknownRoute: (settings) {
