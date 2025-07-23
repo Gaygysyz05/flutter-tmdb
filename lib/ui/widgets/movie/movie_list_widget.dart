@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:themoviedb/ui/resources/resources.dart';
+import 'package:themoviedb/resources/resources.dart';
 
 class Movie {
   final int id;
