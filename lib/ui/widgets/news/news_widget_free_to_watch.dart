@@ -103,7 +103,7 @@ class _NewsWidgetFreeToWatchState extends State<NewsWidgetFreeToWatch> {
                     const Padding(
                       padding: EdgeInsets.only(left: 10, top: 10, right: 10),
                       child: Text(
-                        'Willy`s Wonderland',
+                        'Spider-man Across the Spider-Verse',
                         maxLines: 2,
                         style: TextStyle(
                           fontWeight: FontWeight.w800,
@@ -112,7 +112,7 @@ class _NewsWidgetFreeToWatchState extends State<NewsWidgetFreeToWatch> {
                     ),
                     const Padding(
                       padding: EdgeInsets.only(left: 10, top: 10, right: 10),
-                      child: Text('Feb 12, 2021'),
+                      child: Text('Feb 12, 2023'),
                     ),
                   ],
                 ),

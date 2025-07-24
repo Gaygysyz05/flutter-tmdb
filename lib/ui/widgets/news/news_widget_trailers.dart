@@ -76,7 +76,8 @@ class _NewsWidgetTrailersState extends State<NewsWidgetTrailers> {
                                     alignment: Alignment.center,
                                     children: [
                                       const Image(
-                                        image: AssetImage(AppImages.trailerPreview),
+                                        image: AssetImage(
+                                            AppImages.trailerPreview),
                                       ),
                                       const DecoratedBox(
                                         decoration: BoxDecoration(
@@ -111,7 +112,7 @@ class _NewsWidgetTrailersState extends State<NewsWidgetTrailers> {
                             ],
                           ),
                           const Text(
-                            'Elite',
+                            'Spider-man Across the Spider-Verse',
                             maxLines: 2,
                             style: TextStyle(
                               fontSize: 20,
@@ -122,7 +123,7 @@ class _NewsWidgetTrailersState extends State<NewsWidgetTrailers> {
                             padding:
                                 EdgeInsets.only(left: 10, top: 10, right: 10),
                             child: Text(
-                              'Elite Season 4 | Trailter | Netflix',
+                              'Movie | Trailer | Netflix',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 17,

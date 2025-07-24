@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:themoviedb/domain/api_client/api_client.dart';
 import 'package:themoviedb/domain/data_provider/session_data_provider.dart';
 import 'package:themoviedb/ui/navigation/main_navigation.dart';
@@ -61,25 +62,51 @@ class AuthModel extends ChangeNotifier {
   }
 }
 
-class AuthProvider extends InheritedNotifier<AuthModel> {
-  const AuthProvider({
+class NotifierProvider<Model extends ChangeNotifier> extends InheritedNotifier {
+  final Model model;
+
+  const NotifierProvider({
     super.key,
-    required AuthModel model,
+    required this.model,
     required super.child,
   }) : super(notifier: model);
 
-  static AuthModel? watch(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<AuthProvider>()?.notifier;
+  static Model? watch<Model extends ChangeNotifier>(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<NotifierProvider<Model>>()
+        ?.model;
   }
 
-  static AuthModel? read(BuildContext context) {
-    final widget =
-        context.getElementForInheritedWidgetOfExactType<AuthProvider>()?.widget;
-    return widget is AuthProvider ? widget.notifier : null;
+  static Model? read<Model extends ChangeNotifier>(BuildContext context) {
+    final widget = context
+        .getElementForInheritedWidgetOfExactType<NotifierProvider<Model>>()
+        ?.widget;
+    return widget is NotifierProvider<Model> ? widget.model : null;
+  }
+}
+
+class Provider<Model> extends InheritedWidget {
+  final Model model;
+
+  const Provider({
+    Key? key,
+    required this.model,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  static Model? watch<Model>(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<Provider<Model>>()?.model;
+  }
+
+  static Model? read<Model>(BuildContext context) {
+    final widget = context
+        .getElementForInheritedWidgetOfExactType<Provider<Model>>()
+        ?.widget;
+    return widget is Provider<Model> ? widget.model : null;
   }
 
   @override
-  bool updateShouldNotify(AuthProvider oldWidget) {
-    return true;
+  bool updateShouldNotify(Provider oldWidget) {
+    return model != oldWidget.model;
   }
 }

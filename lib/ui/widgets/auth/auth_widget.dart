@@ -79,7 +79,7 @@ class _FormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = AuthProvider.read(context);
+    final model = NotifierProvider.read<AuthModel>(context);
 
     final textStyle = const TextStyle(fontSize: 16, color: Color(0xFF212529));
     final textFieldDecoration = const InputDecoration(
@@ -143,7 +143,7 @@ class _AuthButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = AuthProvider.watch(context);
+    final model = NotifierProvider.watch<AuthModel>(context);
     final colorButton = const Color(0xFF01B4E4);
     final onPressed =
         model?.canStartAuth == true ? () => model?.auth(context) : null;
@@ -185,7 +185,7 @@ class _ErrorMessageWidgetState extends State<_ErrorMessageWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final newModel = AuthProvider.read(context);
+    final newModel = NotifierProvider.read<AuthModel>(context);
     if (_model != newModel) {
       _model?.removeListener(_onModelChanged);
       _model = newModel;
