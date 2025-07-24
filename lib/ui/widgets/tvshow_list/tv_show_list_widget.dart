@@ -1,47 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb/resources/resources.dart';
 
-class Movie {
+class TVShow {
   final int id;
   final String imageName;
   final String title;
   final String time;
   final String description;
 
-  Movie(
-      {required this.id,
-      required this.imageName,
-      required this.title,
-      required this.time,
-      required this.description});
+  TVShow({
+    required this.id,
+    required this.imageName,
+    required this.title,
+    required this.time,
+    required this.description,
+  });
 }
 
-class MovieListWidget extends StatefulWidget {
-  const MovieListWidget({super.key});
+class TWShowListWidget extends StatefulWidget {
+  TWShowListWidget({Key? key}) : super(key: key);
 
   @override
-  State<MovieListWidget> createState() => _MovieListWidgetState();
+  _TWShowListWidgetState createState() => _TWShowListWidgetState();
 }
 
-class _MovieListWidgetState extends State<MovieListWidget> {
+class _TWShowListWidgetState extends State<TWShowListWidget> {
   final _movies = [
-    Movie(
-        id: 1,
-        imageName: AppImages.demonSlayers,
-        title: 'Demon Slayer',
-        time: 'April 7, 2025',
-        description:
-            'As the Demon Slayer Corps members and Hashira engaged in a group strength training program, the Hashira Training, in preparation for the forthcoming battle against the demons, Muzan Kibutsuji appears at the Ubuyashiki Mansion.'),
+    TVShow(
+      id: 1,
+      imageName: AppImages.tvshow,
+      title: 'Squid Game',
+      time: 'April  7, 2025',
+      description: 'Washed-up MMA fighter Cole Young, unaware of his heritage',
+    ),
   ];
 
-  var _filteredMovies = <Movie>[];
+  var _filteredMovies = <TVShow>[];
 
   final _searchController = TextEditingController();
 
   void _searchMovies() {
     final query = _searchController.text;
     if (query.isNotEmpty) {
-      _filteredMovies = _movies.where((Movie movie) {
+      _filteredMovies = _movies.where((TVShow movie) {
         return movie.title.toLowerCase().contains(query.toLowerCase());
       }).toList();
     } else {
@@ -53,13 +54,17 @@ class _MovieListWidgetState extends State<MovieListWidget> {
   @override
   void initState() {
     super.initState();
+
     _filteredMovies = _movies;
     _searchController.addListener(_searchMovies);
   }
 
   void _onMovieTap(int index) {
     final id = _movies[index].id;
-    Navigator.of(context).pushNamed('/main/movie_detail', arguments: id);
+    Navigator.of(context).pushNamed(
+      '/main/movie_detail',
+      arguments: id,
+    );
   }
 
   @override
@@ -67,7 +72,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
     return Stack(
       children: [
         ListView.builder(
-          padding: EdgeInsets.only(top: 70),
+          padding: const EdgeInsets.only(top: 70),
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           itemCount: _filteredMovies.length,
           itemExtent: 163,
@@ -79,46 +84,42 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                            color: Colors.black.withValues(alpha: (0.2))),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withValues(alpha: (0.1)),
-                              blurRadius: 8,
-                              offset: Offset(0, 2))
-                        ]),
+                      color: Colors.white,
+                      border: Border.all(color: Colors.black.withOpacity(0.2)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
                     clipBehavior: Clip.hardEdge,
                     child: Row(
                       children: [
                         Image(image: AssetImage(movie.imageName)),
-                        SizedBox(
-                          width: 15,
-                        ),
+                        const SizedBox(width: 15),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
-                                height: 20,
-                              ),
+                              const SizedBox(height: 20),
                               Text(
                                 movie.title,
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                                 maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              SizedBox(
-                                height: 5,
-                              ),
+                              const SizedBox(height: 5),
                               Text(
                                 movie.time,
-                                style: TextStyle(color: Colors.grey),
+                                style: const TextStyle(color: Colors.grey),
                                 maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              SizedBox(
-                                height: 20,
-                              ),
+                              const SizedBox(height: 20),
                               Text(
                                 movie.description,
                                 maxLines: 2,
@@ -127,16 +128,14 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                             ],
                           ),
                         ),
-                        SizedBox(
-                          width: 10,
-                        )
+                        const SizedBox(width: 10),
                       ],
                     ),
                   ),
                   Material(
                     color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(10),
                     child: InkWell(
+                      borderRadius: BorderRadius.circular(10),
                       onTap: () => _onMovieTap(index),
                     ),
                   ),
@@ -150,10 +149,11 @@ class _MovieListWidgetState extends State<MovieListWidget> {
           child: TextField(
             controller: _searchController,
             decoration: InputDecoration(
-                labelText: 'Search',
-                filled: true,
-                fillColor: Colors.white.withAlpha(235),
-                border: OutlineInputBorder()),
+              labelText: 'Search',
+              filled: true,
+              fillColor: Colors.white.withAlpha(235),
+              border: const OutlineInputBorder(),
+            ),
           ),
         ),
       ],
