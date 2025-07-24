@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb/resources/resources.dart';
+import 'package:themoviedb/ui/navigation/main_navigation.dart';
 
 class TVShow {
   final int id;
@@ -62,7 +63,7 @@ class _TWShowListWidgetState extends State<TWShowListWidget> {
   void _onMovieTap(int index) {
     final id = _movies[index].id;
     Navigator.of(context).pushNamed(
-      '/main/movie_detail',
+      MainNavigationRoutesNames.movieDetails,
       arguments: id,
     );
   }

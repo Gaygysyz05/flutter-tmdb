@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:themoviedb/ui/widgets/movie_detail/movie_details_main_info.dart';
 import 'package:themoviedb/ui/widgets/movie_detail/movie_details_main_screen_cast.dart';
 
-class MovieDetailWidget extends StatefulWidget {
+class MovieDetailsWidget extends StatefulWidget {
   final int movieId;
 
-  const MovieDetailWidget({super.key, required this.movieId});
+  const MovieDetailsWidget({super.key, required this.movieId});
 
   @override
-  State<MovieDetailWidget> createState() => _MovieDetailWidgetState();
+  State<MovieDetailsWidget> createState() => _MovieDetailWidgetState();
 }
 
-class _MovieDetailWidgetState extends State<MovieDetailWidget> {
+class _MovieDetailWidgetState extends State<MovieDetailsWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
