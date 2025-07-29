@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:themoviedb/domain/data_provider/session_data_provider.dart';
 import 'package:themoviedb/ui/widgets/auth/auth_model.dart';
 import 'package:themoviedb/ui/widgets/main/main_screen_model.dart';
+import 'package:themoviedb/ui/widgets/movie/movie_list_model.dart';
 import 'package:themoviedb/ui/widgets/movie/movie_list_widget.dart';
 import 'package:themoviedb/ui/widgets/news/news_widget.dart';
 import 'package:themoviedb/ui/widgets/tvshow_list/tv_show_list_widget.dart';
@@ -15,6 +16,7 @@ class MainScreenWidget extends StatefulWidget {
 
 class _MainScreenWidgetState extends State<MainScreenWidget> {
   int _selectedTab = 0;
+  final movieListModel = MovieListModel();
 
   void onSelectedTab(int index) {
     if (_selectedTab == index) return;
@@ -24,11 +26,17 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    movieListModel.setupLocale(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final model = NotifierProvider.read<MainScreenModel>(context);
     return Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'TMDB',
             style: TextStyle(color: Colors.white),
           ),
@@ -36,23 +44,27 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
           actions: [
             IconButton(
                 onPressed: () => SessionDataProvider().setSessionId(null),
-                icon: Icon(Icons.logout))
+                icon: const Icon(Icons.logout))
           ],
         ),
         body: IndexedStack(
           index: _selectedTab,
           children: [
-            NewsWidget(),
-            MovieListWidget(),
+            const NewsWidget(),
+            NotifierProvider(
+                model: movieListModel, child: const MovieListWidget()),
             TWShowListWidget(),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
             currentIndex: _selectedTab,
             items: [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-              BottomNavigationBarItem(icon: Icon(Icons.movie), label: 'Movie'),
-              BottomNavigationBarItem(icon: Icon(Icons.tv), label: 'TV shows')
+              const BottomNavigationBarItem(
+                  icon: Icon(Icons.home), label: 'Home'),
+              const BottomNavigationBarItem(
+                  icon: Icon(Icons.movie), label: 'Movie'),
+              const BottomNavigationBarItem(
+                  icon: Icon(Icons.tv), label: 'TV shows')
             ],
             onTap: onSelectedTab));
   }

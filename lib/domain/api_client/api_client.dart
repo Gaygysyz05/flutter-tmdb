@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:themoviedb/domain/entity/popular_movie_response.dart';
+
 enum ApiClientExceptionType { network, auth, other }
 
 class ApiClientException implements Exception {
@@ -14,6 +16,10 @@ class ApiClient {
   static const _host = 'https://api.themoviedb.org/3';
   static const _imageUrl = 'https://image.tmdb.org/t/p/w500';
   static const _apiKey = 'eeb3849172fe2f258b0565fc7b1da63b';
+
+  static String imageUrl(String path) {
+    return '$_imageUrl$path';
+  }
 
   Future<String> auth({
     required String username,
@@ -100,6 +106,26 @@ class ApiClient {
     return result;
   }
 
+  Future<PopularMovieResponse> popularMovie(int page, String locale) async {
+    parser(dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final response = PopularMovieResponse.fromJson(jsonMap);
+      return response;
+    }
+
+    final result = _get(
+      '/movie/popular',
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'page': page.toString(),
+        'language': locale,
+      },
+    );
+
+    return result;
+  }
+
   void _validateResponse(HttpClientResponse response, dynamic json) {
     if (response.statusCode == 401) {
       final dynamic status = json['status_code'];
@@ -141,12 +167,12 @@ class ApiClient {
     };
     parser(dynamic json) {
       final jsonMap = json as Map<String, dynamic>;
-       final sessionId = jsonMap['session_id'] as String;
+      final sessionId = jsonMap['session_id'] as String;
       return sessionId;
     }
 
-    final result = _post('/authentication/session/new',
-        parameters, parser, <String, dynamic>{'api_key': _apiKey});
+    final result = _post('/authentication/session/new', parameters, parser,
+        <String, dynamic>{'api_key': _apiKey});
 
     return result;
   }
