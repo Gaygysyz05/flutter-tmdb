@@ -54,7 +54,7 @@ class _NewsWidgetTrailersState extends State<NewsWidgetTrailers> {
           ),
           const SizedBox(height: 20),
           SizedBox(
-            height: 306,
+            height: 400,
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 return ListView.builder(
@@ -76,6 +76,7 @@ class _NewsWidgetTrailersState extends State<NewsWidgetTrailers> {
                                     alignment: Alignment.center,
                                     children: [
                                       const Image(
+                                        height: 280,
                                         image: AssetImage(
                                             AppImages.trailerPreview),
                                       ),

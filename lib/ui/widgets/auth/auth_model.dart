@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -40,8 +41,21 @@ class AuthModel extends ChangeNotifier {
         username: login,
         password: password,
       );
-    } catch (e) {
-      _errorMessage = 'Invalid username or password.';
+    } on ApiClientException catch (e) {
+      switch (e.type) {
+        case ApiClientExceptionType.network:
+          _errorMessage = 'The server is not available. Check yout network connection';
+          break;
+        case ApiClientExceptionType.auth:
+          _errorMessage = 'Invalid login ot password!';
+          break;
+        case ApiClientExceptionType.other:
+          _errorMessage = 'An error occurred. Please try again';   
+          break;
+      }
+    }
+     catch (e) {
+      _errorMessage = 'An error occurred. Please try again';   
     }
 
     _isAuthProgress = false;
