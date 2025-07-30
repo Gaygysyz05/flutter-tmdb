@@ -62,7 +62,8 @@ class ApiClient {
       throw ApiClientException(ApiClientExceptionType.network);
     } on ApiClientException {
       rethrow;
-    } catch (_) {
+    } catch (e) {
+      print('Error in API client: $e');
       throw ApiClientException(ApiClientExceptionType.other);
     }
   }

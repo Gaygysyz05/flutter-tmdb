@@ -7,15 +7,15 @@ part 'movie_details.g.dart';
 class MovieDetails {
   final bool adult;
   final String? backdropPath;
-  final BelongsToCollection belongsToCollection;
+  final BelongsToCollection? belongsToCollection;
   final int budget;
   final List<Genre> genres;
   final String? homepage;
   final int id;
-  final String imdbId;
+  final String? imdbId;
   final List<String> originCountry;
-  final String originalLanguage;
-  final String originalTitle;
+  final String? originalLanguage;
+  final String? originalTitle;
   final String? overview;
   final double popularity;
   final String? posterPath;
@@ -26,9 +26,9 @@ class MovieDetails {
   final int revenue;
   final int? runtime;
   final List<SpokenLanguage> spokenLanguages;
-  final String status;
+  final String? status;
   final String? tagline;
-  final String title;
+  final String? title;
   final bool video;
   final double voteAverage;
   final int voteCount;
@@ -70,7 +70,7 @@ class MovieDetails {
 @JsonSerializable(fieldRename: FieldRename.snake)
 class BelongsToCollection {
   final int id;
-  final String name;
+  final String? name;
   final String? posterPath;
   final String? backdropPath;
 
@@ -90,7 +90,7 @@ class BelongsToCollection {
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Genre {
   final int id;
-  final String name;
+  final String? name;
   Genre({
     required this.id,
     required this.name,
@@ -104,8 +104,8 @@ class Genre {
 class ProductionCompanie {
   final int id;
   final String? logoPath;
-  final String name;
-  final String originCountry;
+  final String? name;
+  final String? originCountry;
 
   ProductionCompanie({
     required this.id,
@@ -123,8 +123,8 @@ class ProductionCompanie {
 @JsonSerializable(fieldRename: FieldRename.snake)
 class ProductionCountrie {
   @JsonKey(name: 'iso_639_1')
-  final String iso;
-  final String name;
+  final String? iso;
+  final String? name;
   ProductionCountrie({
     required this.iso,
     required this.name,
@@ -139,8 +139,8 @@ class ProductionCountrie {
 @JsonSerializable(fieldRename: FieldRename.snake)
 class SpokenLanguage {
   @JsonKey(name: 'iso_639_1')
-  final String iso;
-  final String name;
+  final String? iso;
+  final String? name;
 
   SpokenLanguage({
     required this.iso,
