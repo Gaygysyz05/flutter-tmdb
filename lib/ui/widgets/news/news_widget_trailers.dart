@@ -54,7 +54,7 @@ class _NewsWidgetTrailersState extends State<NewsWidgetTrailers> {
           ),
           const SizedBox(height: 20),
           SizedBox(
-            height: 400,
+            height: 350,
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 return ListView.builder(
@@ -72,15 +72,14 @@ class _NewsWidgetTrailersState extends State<NewsWidgetTrailers> {
                                 padding: const EdgeInsets.only(bottom: 20),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
-                                  child: Stack(
+                                  child: const Stack(
                                     alignment: Alignment.center,
                                     children: [
-                                      const Image(
-                                        height: 280,
+                                      Image(
                                         image: AssetImage(
                                             AppImages.trailerPreview),
                                       ),
-                                      const DecoratedBox(
+                                      DecoratedBox(
                                         decoration: BoxDecoration(
                                           boxShadow: [
                                             BoxShadow(
@@ -104,7 +103,7 @@ class _NewsWidgetTrailersState extends State<NewsWidgetTrailers> {
                                 right: 15,
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.7),
+                                    color: Colors.grey.withValues(alpha: 0.7),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: const Icon(Icons.more_horiz),
