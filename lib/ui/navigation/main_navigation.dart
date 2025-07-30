@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:themoviedb/library/widgets/inherited/provider.dart';
 import 'package:themoviedb/ui/widgets/auth/auth_model.dart';
 import 'package:themoviedb/ui/widgets/auth/auth_widget.dart';
 import 'package:themoviedb/ui/widgets/main/main_screen_model.dart';
 import 'package:themoviedb/ui/widgets/main/main_screen_widget.dart';
+import 'package:themoviedb/ui/widgets/movie_detail/movie_details_model.dart';
 import 'package:themoviedb/ui/widgets/movie_detail/movie_details_widget.dart';
 
 abstract class MainNavigationRoutesNames {
@@ -15,13 +17,14 @@ class MainNavigation {
   String initialRoute(bool isAuth) => isAuth
       ? MainNavigationRoutesNames.mainScreen
       : MainNavigationRoutesNames.auth;
+
   final routes = <String, Widget Function(BuildContext)>{
     MainNavigationRoutesNames.auth: (context) => NotifierProvider(
-          model: AuthModel(),
+          create: () => AuthModel(),
           child: const AuthWidget(),
         ),
     MainNavigationRoutesNames.mainScreen: (context) => NotifierProvider(
-          model: MainScreenModel(),
+          create: () => MainScreenModel(),
           child: const MainScreenWidget(),
         ),
   };
@@ -31,7 +34,10 @@ class MainNavigation {
         final arguments = settings.arguments;
         final movieId = arguments is int ? arguments : 0;
         return MaterialPageRoute(
-          builder: (context) => MovieDetailsWidget(movieId: movieId),
+          builder: (context) => NotifierProvider(
+            create: () => MovieDetailsModel(movieId),
+            child: const MovieDetailsWidget(),
+          ),
         );
       default:
         const widget = Text('Navigation error');

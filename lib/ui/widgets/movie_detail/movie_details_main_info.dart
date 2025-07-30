@@ -7,22 +7,22 @@ class MovieDetailMainInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _TopPosterWidget(),
         Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(20.0),
           child: _MovieNamedWidget(),
         ),
         _ScoreWidget(),
         _SummeryWidget(),
         Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(10.0),
           child: _OverViewWidget(),
         ),
         Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(10.0),
           child: _DescriptionWidget(),
         ),
         SizedBox(
@@ -35,13 +35,11 @@ class MovieDetailMainInfo extends StatelessWidget {
 }
 
 class _DescriptionWidget extends StatelessWidget {
-  const _DescriptionWidget({
-    super.key,
-  });
+  const _DescriptionWidget();
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
         'As the Demon Slayer Corps members and Hashira engaged in a group strength training program, the Hashira Training, in preparation for the forthcoming battle against the demons, Muzan Kibutsuji appears at the Ubuyashiki Mansion.',
         style: TextStyle(
           color: Colors.white,
@@ -52,13 +50,11 @@ class _DescriptionWidget extends StatelessWidget {
 }
 
 class _OverViewWidget extends StatelessWidget {
-  const _OverViewWidget({
-    super.key,
-  });
+  const _OverViewWidget();
 
   @override
   Widget build(BuildContext context) {
-    return Text('Overview',
+    return const Text('Overview',
         style: TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w400,
@@ -68,11 +64,11 @@ class _OverViewWidget extends StatelessWidget {
 }
 
 class _TopPosterWidget extends StatelessWidget {
-  const _TopPosterWidget({super.key});
+  const _TopPosterWidget();
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return const Stack(
       children: [
         Image(image: AssetImage(AppImages.topHeader)),
         Positioned(
@@ -87,13 +83,13 @@ class _TopPosterWidget extends StatelessWidget {
 }
 
 class _MovieNamedWidget extends StatelessWidget {
-  const _MovieNamedWidget({super.key});
+  const _MovieNamedWidget();
 
   @override
   Widget build(BuildContext context) {
     return RichText(
         maxLines: 3,
-        text: TextSpan(children: [
+        text: const TextSpan(children: [
           TextSpan(
               text: 'Demon Slayer',
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17)),
@@ -105,7 +101,7 @@ class _MovieNamedWidget extends StatelessWidget {
 }
 
 class _ScoreWidget extends StatelessWidget {
-  const _ScoreWidget({super.key});
+  const _ScoreWidget();
 
   @override
   Widget build(BuildContext context) {
@@ -114,16 +110,16 @@ class _ScoreWidget extends StatelessWidget {
       children: [
         TextButton(
             onPressed: () {},
-            child: Row(
+            child: const Row(
               children: [
                 SizedBox(
                   width: 40,
                   height: 40,
                   child: RadialPercentWidget(
                     percent: 0.72,
-                    fillColor: const Color.fromARGB(255, 10, 23, 25),
-                    lineColor: const Color.fromARGB(255, 37, 203, 103),
-                    freeColor: const Color.fromARGB(255, 25, 54, 31),
+                    fillColor: Color.fromARGB(255, 10, 23, 25),
+                    lineColor: Color.fromARGB(255, 37, 203, 103),
+                    freeColor: Color.fromARGB(255, 25, 54, 31),
                     lineWidth: 3,
                     child: Text('72'),
                   ),
@@ -141,7 +137,7 @@ class _ScoreWidget extends StatelessWidget {
         ),
         TextButton(
             onPressed: () {},
-            child: Row(
+            child: const Row(
               children: [
                 Icon(Icons.play_arrow),
                 Text('Play Trailer'),
@@ -153,14 +149,14 @@ class _ScoreWidget extends StatelessWidget {
 }
 
 class _SummeryWidget extends StatelessWidget {
-  const _SummeryWidget({super.key});
+  const _SummeryWidget();
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
+    return const ColoredBox(
       color: Color.fromRGBO(22, 21, 25, 1.0),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 70),
         child: Text(
           '07/18/2025 (JP) 2h 35m   Animation, Action, Fantasy, Thrille',
           textAlign: TextAlign.center,
@@ -174,17 +170,17 @@ class _SummeryWidget extends StatelessWidget {
 }
 
 class _PeopleWidgets extends StatelessWidget {
-  const _PeopleWidgets({super.key});
+  const _PeopleWidgets();
 
   @override
   Widget build(BuildContext context) {
-    final nameStyle = TextStyle(
+    const nameStyle = TextStyle(
         color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16);
 
-    final jobTitleStyle = TextStyle(
+    const jobTitleStyle = TextStyle(
         color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16);
 
-    return Column(
+    return const Column(
       children: [
         Row(
           mainAxisSize: MainAxisSize.max,

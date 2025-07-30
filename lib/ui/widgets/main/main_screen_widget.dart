@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb/domain/data_provider/session_data_provider.dart';
-import 'package:themoviedb/ui/widgets/auth/auth_model.dart';
+import 'package:themoviedb/library/widgets/inherited/provider.dart';
 import 'package:themoviedb/ui/widgets/main/main_screen_model.dart';
 import 'package:themoviedb/ui/widgets/movie/movie_list_model.dart';
 import 'package:themoviedb/ui/widgets/movie/movie_list_widget.dart';
@@ -33,7 +33,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.read<MainScreenModel>(context);
+    NotifierProvider.read<MainScreenModel>(context);
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -52,7 +52,10 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
           children: [
             const NewsWidget(),
             NotifierProvider(
-                model: movieListModel, child: const MovieListWidget()),
+              create: () => movieListModel,
+              isManagingModel: false,
+              child: const MovieListWidget(),
+            ),
             TWShowListWidget(),
           ],
         ),

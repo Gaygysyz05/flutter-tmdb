@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb/domain/api_client/api_client.dart';
-import 'package:themoviedb/ui/widgets/auth/auth_model.dart';
+import 'package:themoviedb/library/widgets/inherited/provider.dart';
 import 'package:themoviedb/ui/widgets/movie/movie_list_model.dart';
 
 class MovieListWidget extends StatelessWidget {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:themoviedb/library/widgets/inherited/provider.dart';
 import 'package:themoviedb/ui/theme/button_style.dart';
 import 'package:themoviedb/ui/widgets/auth/auth_model.dart';
 
@@ -14,7 +15,7 @@ class _AuthWidgetState extends State<AuthWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Login to yout account',
           style: TextStyle(color: Colors.white),
         ),
@@ -22,7 +23,7 @@ class _AuthWidgetState extends State<AuthWidget> {
       ),
       body: ListView(
         children: [
-          HeaderWidget(),
+          const HeaderWidget(),
         ],
       ),
     );
@@ -39,35 +40,35 @@ class HeaderWidget extends StatefulWidget {
 class _HeaderWidgetState extends State<HeaderWidget> {
   @override
   Widget build(BuildContext context) {
-    final textStyle = const TextStyle(fontSize: 16, color: Colors.black);
+    const textStyle = TextStyle(fontSize: 16, color: Colors.black);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 25),
-          _FormWidget(),
-          SizedBox(height: 25),
-          Text(
+          const SizedBox(height: 25),
+          const _FormWidget(),
+          const SizedBox(height: 25),
+          const Text(
             'In order to use the editing and rating capabilities of TMDB, as well as get personal recommendations you will need to login to your account. If you do not have an account, registering for an account is free and simple.',
             style: textStyle,
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           TextButton(
               onPressed: () {},
               style: AppButtonStyle.linkButton,
-              child: Text('Register')),
-          SizedBox(height: 25),
-          Text(
+              child: const Text('Register')),
+          const SizedBox(height: 25),
+          const Text(
             'If you signed up but didn\'t get your verification email.',
             style: textStyle,
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           TextButton(
               onPressed: () {},
               style: AppButtonStyle.linkButton,
-              child: Text('Verify Email')),
+              child: const Text('Verify Email')),
         ],
       ),
     );
@@ -75,14 +76,14 @@ class _HeaderWidgetState extends State<HeaderWidget> {
 }
 
 class _FormWidget extends StatelessWidget {
-  const _FormWidget({super.key});
+  const _FormWidget();
 
   @override
   Widget build(BuildContext context) {
     final model = NotifierProvider.read<AuthModel>(context);
 
-    final textStyle = const TextStyle(fontSize: 16, color: Color(0xFF212529));
-    final textFieldDecoration = const InputDecoration(
+    const textStyle = TextStyle(fontSize: 16, color: Color(0xFF212529));
+    const textFieldDecoration = InputDecoration(
         border: OutlineInputBorder(),
         contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         isCollapsed: true);
@@ -90,29 +91,29 @@ class _FormWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _ErrorMessageWidget(),
-        SizedBox(
+        const _ErrorMessageWidget(),
+        const SizedBox(
           height: 10,
         ),
-        Text(
+        const Text(
           'Username',
           style: textStyle,
         ),
-        SizedBox(
+        const SizedBox(
           height: 5,
         ),
         TextField(
           controller: model?.loginTextController,
           decoration: textFieldDecoration,
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
-        Text(
+        const Text(
           'Password',
           style: textStyle,
         ),
-        SizedBox(
+        const SizedBox(
           height: 5,
         ),
         TextField(
@@ -120,17 +121,17 @@ class _FormWidget extends StatelessWidget {
           decoration: textFieldDecoration,
           obscureText: true,
         ),
-        SizedBox(
+        const SizedBox(
           height: 25,
         ),
         Row(
           children: [
-            _AuthButtonWidget(),
-            SizedBox(width: 25),
+            const _AuthButtonWidget(),
+            const SizedBox(width: 25),
             TextButton(
                 onPressed: () {},
                 style: AppButtonStyle.linkButton,
-                child: Text('Reset password'))
+                child: const Text('Reset password'))
           ],
         ),
       ],
@@ -139,17 +140,17 @@ class _FormWidget extends StatelessWidget {
 }
 
 class _AuthButtonWidget extends StatelessWidget {
-  const _AuthButtonWidget({super.key});
+  const _AuthButtonWidget();
 
   @override
   Widget build(BuildContext context) {
     final model = NotifierProvider.watch<AuthModel>(context);
-    final colorButton = const Color(0xFF01B4E4);
+    const colorButton = Color(0xFF01B4E4);
     final onPressed =
         model?.canStartAuth == true ? () => model?.auth(context) : null;
 
     final child = model?.isAuthProgress == true
-        ? SizedBox(
+        ? const SizedBox(
             width: 15,
             height: 15,
             child:
@@ -159,7 +160,7 @@ class _AuthButtonWidget extends StatelessWidget {
 
     return ElevatedButton(
         onPressed: onPressed,
-        style: ButtonStyle(
+        style: const ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(colorButton),
             foregroundColor: WidgetStatePropertyAll(Colors.white),
             textStyle: WidgetStatePropertyAll(
@@ -173,7 +174,7 @@ class _AuthButtonWidget extends StatelessWidget {
 }
 
 class _ErrorMessageWidget extends StatefulWidget {
-  const _ErrorMessageWidget({super.key});
+  const _ErrorMessageWidget();
 
   @override
   State<_ErrorMessageWidget> createState() => _ErrorMessageWidgetState();
@@ -206,7 +207,6 @@ class _ErrorMessageWidgetState extends State<_ErrorMessageWidget> {
   @override
   Widget build(BuildContext context) {
     final errorMessage = _model?.errorMessage;
-    print('Error message in widget: $errorMessage');
 
     if (errorMessage == null) return const SizedBox.shrink();
 
@@ -214,7 +214,7 @@ class _ErrorMessageWidgetState extends State<_ErrorMessageWidget> {
       padding: const EdgeInsets.only(bottom: 20),
       child: Text(
         errorMessage,
-        style: TextStyle(color: Colors.red, fontSize: 17),
+        style: const TextStyle(color: Colors.red, fontSize: 17),
       ),
     );
   }
