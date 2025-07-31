@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:themoviedb/domain/api_client/api_client.dart';
+import 'package:themoviedb/library/widgets/inherited/provider.dart';
 import 'package:themoviedb/ui/elements/radial_percent_widget.dart';
-import 'package:themoviedb/resources/resources.dart';
+import 'package:themoviedb/ui/widgets/movie_detail/movie_details_model.dart';
 
-class MovieDetailMainInfo extends StatelessWidget {
-  const MovieDetailMainInfo({super.key});
+class MovieDetailsMainInfoWidget extends StatelessWidget {
+  const MovieDetailsMainInfoWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +41,11 @@ class _DescriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-        'As the Demon Slayer Corps members and Hashira engaged in a group strength training program, the Hashira Training, in preparation for the forthcoming battle against the demons, Muzan Kibutsuji appears at the Ubuyashiki Mansion.',
-        style: TextStyle(
+    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    final overview = model?.movieDetails?.overview ?? '';
+    return Text(
+        overview,
+        style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w400,
           fontSize: 16,
@@ -68,16 +72,32 @@ class _TopPosterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Stack(
-      children: [
-        Image(image: AssetImage(AppImages.topHeader)),
-        Positioned(
-          top: 20,
-          left: 20,
-          bottom: 20,
-          child: Image(image: AssetImage(AppImages.topHeaderSubImage)),
-        ),
-      ],
+    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    final backdropPath = model?.movieDetails?.backdropPath;
+    final posterPath = model?.movieDetails?.posterPath;
+    return AspectRatio(
+      aspectRatio: 398 / 219,
+      child: Stack(
+        children: [
+          backdropPath != null
+              ? Image(
+                  image: NetworkImage(ApiClient.imageUrl(backdropPath)),
+                  fit: BoxFit.cover,
+                )
+              : const SizedBox.shrink(),
+          Positioned(
+            top: 20,
+            left: 20,
+            bottom: 20,
+            child: posterPath != null
+                ? Image(
+                    image: NetworkImage(ApiClient.imageUrl(posterPath)),
+                    fit: BoxFit.cover,
+                  )
+                : const SizedBox.shrink(),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -87,16 +107,22 @@ class _MovieNamedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
-        maxLines: 3,
-        text: const TextSpan(children: [
-          TextSpan(
-              text: 'Demon Slayer',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17)),
-          TextSpan(
-              text: ' (2025)',
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16))
-        ]));
+    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    final year = model?.movieDetails?.releaseDate?.year ?? 'Unknown Year';
+    return Center(
+      child: RichText(
+          maxLines: 3,
+          text: TextSpan(children: [
+            TextSpan(
+                text: model?.movieDetails?.title ?? 'Unknown Title',
+                style:
+                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 17)),
+            TextSpan(
+                text: ' ($year)',
+                style:
+                    const TextStyle(fontWeight: FontWeight.w400, fontSize: 16))
+          ])),
+    );
   }
 }
 
@@ -105,29 +131,36 @@ class _ScoreWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    final userScore = model?.movieDetails?.voteAverage.toDouble() ?? 0.0;
+    const textColor = TextStyle(color: Colors.white);
+    const Color lineColor = Color.fromARGB(255, 37, 203, 103);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         TextButton(
             onPressed: () {},
-            child: const Row(
+            child: Row(
               children: [
                 SizedBox(
                   width: 40,
                   height: 40,
                   child: RadialPercentWidget(
-                    percent: 0.72,
-                    fillColor: Color.fromARGB(255, 10, 23, 25),
-                    lineColor: Color.fromARGB(255, 37, 203, 103),
-                    freeColor: Color.fromARGB(255, 25, 54, 31),
+                    percent: userScore / 10,
+                    fillColor: const Color.fromARGB(255, 10, 23, 25),
+                    lineColor: lineColor,
+                    freeColor: const Color.fromARGB(255, 25, 54, 31),
                     lineWidth: 3,
-                    child: Text('72'),
+                    child: Text(
+                      '${(userScore * 10).round()}',
+                      style: textColor,
+                    ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
-                Text('User Score'),
+                const Text('User Score', style: TextStyle(color: lineColor)),
               ],
             )),
         Container(
@@ -153,15 +186,41 @@ class _SummeryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ColoredBox(
-      color: Color.fromRGBO(22, 21, 25, 1.0),
+    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    var texts = <String>[];
+    if(model == null) return const SizedBox.shrink();
+
+    final releaseDate = model.movieDetails?.releaseDate;
+    if (releaseDate != null) {
+      texts.add(model.stringFromDate(releaseDate));
+    }
+
+    final originCountry = model.movieDetails?.originCountry;
+    if(originCountry != null && originCountry.isNotEmpty) {
+      texts.add('(${originCountry[0]})');
+    }
+
+    final runtime = model.movieDetails?.runtime;
+    final hours = runtime != null ? (runtime / 60).floor() : 0;
+    final minutes = runtime != null ? (runtime % 60) : 0;
+    if (runtime != null && runtime > 0) {
+      texts.add('$hours h $minutes m');
+    }
+
+    final genres = model.movieDetails?.genres ?? [];
+    if (genres.isNotEmpty) {
+      texts.add(genres.map((genre) => genre.name).join(', '));
+    }
+
+    return ColoredBox(
+      color: const Color.fromRGBO(22, 21, 25, 1.0),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 70),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Text(
-          '07/18/2025 (JP) 2h 35m   Animation, Action, Fantasy, Thrille',
+          texts.join(' '),
           textAlign: TextAlign.center,
           maxLines: 3,
-          style: TextStyle(
+          style: const TextStyle(
               color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16),
         ),
       ),

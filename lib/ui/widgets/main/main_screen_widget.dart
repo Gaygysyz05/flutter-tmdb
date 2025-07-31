@@ -41,6 +41,9 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
             style: TextStyle(color: Colors.white),
           ),
           centerTitle: true,
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+          ),
           actions: [
             IconButton(
                 onPressed: () => SessionDataProvider().setSessionId(null),

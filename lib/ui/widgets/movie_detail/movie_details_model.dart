@@ -15,6 +15,9 @@ class MovieDetailsModel extends ChangeNotifier {
 
   MovieDetailsModel(this.movieId);
 
+  String stringFromDate(DateTime? date) =>
+      date != null ? _dateFormat.format(date) : 'No release date';
+
   Future<void> setupLocale(BuildContext context) async {
     final locale = Localizations.localeOf(context).toLanguageTag();
     if (_locale == locale) return;
@@ -27,5 +30,4 @@ class MovieDetailsModel extends ChangeNotifier {
     _movieDetails = await _apiClient.movieDetails(movieId, _locale);
     notifyListeners();
   }
-
 }
