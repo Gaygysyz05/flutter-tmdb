@@ -115,8 +115,8 @@ Contributions are welcome! This project is still in development, so there are ma
 - [x] Basic project setup
 - [x] TMDb API integration
 - [x] User authentication
-- [ ] Movie search and browsing
-- [ ] Detailed movie information
+- [x] Movie search and browsing
+- [x] Detailed movie information
 - [ ] User ratings and reviews
 - [ ] Watchlist functionality
 - [ ] TV show support
