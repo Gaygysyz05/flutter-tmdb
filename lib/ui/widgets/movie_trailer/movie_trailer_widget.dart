@@ -38,16 +38,19 @@ class _MovieTrailerWidgetState extends State<MovieTrailerWidget> {
           color: Colors.white,
         ),
       ),
-      body: Center(
-        child: YoutubePlayer(
-          controller: _controller,
-          showVideoProgressIndicator: true,
-          progressIndicatorColor: Colors.red,
-          bottomActions: [
-            const CurrentPosition(),
-            const ProgressBar(isExpanded: true),
-            const FullScreenButton(),
-          ],
+      body: ColoredBox(
+        color: const Color.fromRGBO(22, 21, 25, 1.0),
+        child: Center(
+          child: YoutubePlayer(
+            controller: _controller,
+            showVideoProgressIndicator: true,
+            progressIndicatorColor: Colors.red,
+            bottomActions: [
+              const CurrentPosition(),
+              const ProgressBar(isExpanded: true),
+              const FullScreenButton(),
+            ],
+          ),
         ),
       ),
     );

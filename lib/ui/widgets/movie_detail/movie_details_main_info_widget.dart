@@ -100,6 +100,14 @@ class _TopPosterWidget extends StatelessWidget {
                   )
                 : const SizedBox.shrink(),
           ),
+          Positioned(
+            top: 5,
+            right: 5,
+            child: IconButton(
+              onPressed: () => model?.toggleFavorite(),
+              icon: Icon(model?.isFavorite == true ? Icons.favorite : Icons.favorite_outline, color: Colors.red),
+            ),
+          )
         ],
       ),
     );
