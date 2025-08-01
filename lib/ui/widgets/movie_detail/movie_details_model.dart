@@ -36,7 +36,6 @@ class MovieDetailsModel extends ChangeNotifier {
     if (sessionId != null) {
       _isFavorite = await _apiClient.isFavorite(movieId, sessionId);
     }
-    _isFavorite = await _apiClient.isFavorite(movieId, sessionId!);
     notifyListeners();
   }
 
