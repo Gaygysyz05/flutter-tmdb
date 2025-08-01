@@ -171,14 +171,20 @@ class ApiClient {
   ) async {
     parser(dynamic json) {
       final jsonMap = json as Map<String, dynamic>;
-      final response = MovieDetails.fromJson(jsonMap);
-      return response;
+      try {
+        final response = MovieDetails.fromJson(jsonMap);
+        return response;
+      } catch (e) {
+        print('Error parsing movie details: $e');
+        throw ApiClientException(ApiClientExceptionType.other);
+      }
     }
 
     final result = _get(
       '/movie/$movieId',
       parser,
       <String, dynamic>{
+        'append_to_response': 'credits,videos',
         'api_key': _apiKey,
         'language': locale,
       },

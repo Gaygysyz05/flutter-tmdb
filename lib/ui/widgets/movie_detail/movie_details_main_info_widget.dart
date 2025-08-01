@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb/domain/api_client/api_client.dart';
+import 'package:themoviedb/domain/entity/movie_details_cast.dart';
 import 'package:themoviedb/library/widgets/inherited/provider.dart';
 import 'package:themoviedb/ui/elements/radial_percent_widget.dart';
+import 'package:themoviedb/ui/navigation/main_navigation.dart';
 import 'package:themoviedb/ui/widgets/movie_detail/movie_details_model.dart';
 
 class MovieDetailsMainInfoWidget extends StatelessWidget {
@@ -30,7 +32,10 @@ class MovieDetailsMainInfoWidget extends StatelessWidget {
         SizedBox(
           height: 30,
         ),
-        _PeopleWidgets(),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: _PeopleWidgets(),
+        ),
       ],
     );
   }
@@ -43,8 +48,7 @@ class _DescriptionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = NotifierProvider.watch<MovieDetailsModel>(context);
     final overview = model?.movieDetails?.overview ?? '';
-    return Text(
-        overview,
+    return Text(overview,
         style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w400,
@@ -133,6 +137,9 @@ class _ScoreWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = NotifierProvider.watch<MovieDetailsModel>(context);
     final userScore = model?.movieDetails?.voteAverage.toDouble() ?? 0.0;
+    final videos = model?.movieDetails?.videos.results
+        .where((video) => video.site == 'YouTube' && video.type == 'Trailer');
+    final trailerKey = videos?.isNotEmpty == true ? videos!.first.key : null;
     const textColor = TextStyle(color: Colors.white);
     const Color lineColor = Color.fromARGB(255, 37, 203, 103);
     return Row(
@@ -157,25 +164,30 @@ class _ScoreWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
+                const SizedBox(width: 10),
                 const Text('User Score', style: TextStyle(color: lineColor)),
               ],
             )),
-        Container(
-          width: 1,
-          height: 15,
-          color: Colors.grey,
-        ),
-        TextButton(
-            onPressed: () {},
-            child: const Row(
-              children: [
-                Icon(Icons.play_arrow),
-                Text('Play Trailer'),
-              ],
-            )),
+        Container(width: 1, height: 15, color: Colors.grey),
+        trailerKey != null
+            ? TextButton(
+                onPressed: () => Navigator.pushNamed(
+                  context,
+                  MainNavigationRoutesNames.movieTrailer,
+                  arguments: trailerKey,
+                ),
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.play_arrow,
+                      color: Colors.blue,
+                    ),
+                    SizedBox(width: 5),
+                    Text('Play Trailer', style: TextStyle(color: Colors.blue)),
+                  ],
+                ),
+              )
+            : const SizedBox.shrink(),
       ],
     );
   }
@@ -188,7 +200,7 @@ class _SummeryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = NotifierProvider.watch<MovieDetailsModel>(context);
     var texts = <String>[];
-    if(model == null) return const SizedBox.shrink();
+    if (model == null) return const SizedBox.shrink();
 
     final releaseDate = model.movieDetails?.releaseDate;
     if (releaseDate != null) {
@@ -196,7 +208,7 @@ class _SummeryWidget extends StatelessWidget {
     }
 
     final originCountry = model.movieDetails?.originCountry;
-    if(originCountry != null && originCountry.isNotEmpty) {
+    if (originCountry != null && originCountry.isNotEmpty) {
       texts.add('(${originCountry[0]})');
     }
 
@@ -233,82 +245,72 @@ class _PeopleWidgets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    var crew = model?.movieDetails?.credits.crew;
+    if (crew == null || crew.isEmpty) return const SizedBox.shrink();
+    crew = crew.length > 4 ? crew.sublist(0, 4) : crew;
+
+    var crewChunks = <List<Employee>>[];
+    for (var i = 0; i < crew.length; i += 2) {
+      crewChunks
+          .add(crew.sublist(i, (i + 2 < crew.length) ? i + 2 : crew.length));
+    }
+
+    return Column(
+      children: crewChunks
+          .map(
+            (employees) => Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: _PeopleWidgetsRow(employees: employees),
+            ),
+          )
+          .toList(),
+    );
+  }
+}
+
+class _PeopleWidgetsRow extends StatelessWidget {
+  final List<Employee> employees;
+  const _PeopleWidgetsRow({super.key, required this.employees});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: employees
+          .map(
+            (employee) => _PeopleWidgetsRowItem(employee: employee),
+          )
+          .toList(),
+    );
+  }
+}
+
+class _PeopleWidgetsRowItem extends StatelessWidget {
+  final Employee employee;
+  const _PeopleWidgetsRowItem({super.key, required this.employee});
+
+  @override
+  Widget build(BuildContext context) {
     const nameStyle = TextStyle(
         color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16);
-
     const jobTitleStyle = TextStyle(
-        color: Colors.white, fontWeight: FontWeight.w400, fontSize: 16);
+        color: Colors.orange, fontWeight: FontWeight.w400, fontSize: 16);
 
-    return const Column(
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Haruo Sotozaki',
-                  style: nameStyle,
-                ),
-                Text(
-                  'Director',
-                  style: jobTitleStyle,
-                )
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Haruo Sotozaki',
-                  style: nameStyle,
-                ),
-                Text(
-                  'Director',
-                  style: jobTitleStyle,
-                )
-              ],
-            )
-          ],
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Haruo Sotozaki',
-                  style: nameStyle,
-                ),
-                Text(
-                  'Director',
-                  style: jobTitleStyle,
-                )
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Haruo Sotozaki',
-                  style: nameStyle,
-                ),
-                Text(
-                  'Director',
-                  style: jobTitleStyle,
-                )
-              ],
-            )
-          ],
-        ),
-      ],
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            employee.name,
+            style: nameStyle,
+          ),
+          Text(
+            employee.job,
+            style: jobTitleStyle,
+          )
+        ],
+      ),
     );
   }
 }
