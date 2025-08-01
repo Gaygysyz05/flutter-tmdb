@@ -51,10 +51,11 @@ class AuthModel extends ChangeNotifier {
         case ApiClientExceptionType.other:
           _errorMessage = 'An error occurred. Please try again';   
           break;
+        case ApiClientExceptionType.sessionExpired:
+          throw UnimplementedError();
       }
-    }
-     catch (e) {
-      _errorMessage = 'An error occurred. Please try again';   
+    } catch (e) {
+      _errorMessage = 'An error occurred. Please try again';
     }
 
     _isAuthProgress = false;

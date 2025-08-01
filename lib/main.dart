@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:themoviedb/library/widgets/inherited/provider.dart';
 import 'package:themoviedb/ui/navigation/main_navigation.dart';
 import 'package:themoviedb/ui/theme/app_colors.dart';
 import 'package:themoviedb/ui/widgets/app/my_app_model.dart';
@@ -8,16 +9,18 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final model = MyAppModel();
   await model.checkAuth();
-  runApp(MyApp(model: model));
+  const app = MyApp();
+  final widget = Provider(model: model, child: app);
+  runApp(widget);
 }
 
 class MyApp extends StatelessWidget {
-  final MyAppModel model;
   static final mainNavigation = MainNavigation();
-  const MyApp({super.key, required this.model});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final model = Provider.read<MyAppModel>(context);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -42,7 +45,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       routes: mainNavigation.routes,
-      initialRoute: mainNavigation.initialRoute(model.isAuth),
+      initialRoute: mainNavigation.initialRoute(model?.isAuth == true),
       onGenerateRoute: mainNavigation.onGenerateRoute,
       onUnknownRoute: (settings) {
         return MaterialPageRoute<void>(
