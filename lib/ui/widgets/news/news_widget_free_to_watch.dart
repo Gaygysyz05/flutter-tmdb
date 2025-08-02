@@ -3,7 +3,7 @@ import 'package:themoviedb/resources/resources.dart';
 import 'package:themoviedb/ui/elements/radial_percent_widget.dart';
 
 class NewsWidgetFreeToWatch extends StatefulWidget {
-  const NewsWidgetFreeToWatch({Key? key}) : super(key: key);
+  const NewsWidgetFreeToWatch({super.key});
 
   @override
   _NewsWidgetFreeToWatchState createState() => _NewsWidgetFreeToWatchState();
@@ -56,9 +56,9 @@ class _NewsWidgetFreeToWatchState extends State<NewsWidgetFreeToWatch> {
                           padding: const EdgeInsets.only(bottom: 20),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
-                            child: SizedBox(
+                            child: const SizedBox(
                               height: 180,
-                              child: const Image(
+                              child: Image(
                                 image: AssetImage(AppImages.news),
                               ),
                             ),
@@ -75,7 +75,7 @@ class _NewsWidgetFreeToWatchState extends State<NewsWidgetFreeToWatch> {
                             child: const Icon(Icons.more_horiz),
                           ),
                         ),
-                        Positioned(
+                        const Positioned(
                           left: 10,
                           bottom: 0,
                           child: SizedBox(
@@ -83,12 +83,12 @@ class _NewsWidgetFreeToWatchState extends State<NewsWidgetFreeToWatch> {
                             height: 40,
                             child: RadialPercentWidget(
                               percent: 0.68,
-                              fillColor: const Color.fromARGB(255, 10, 23, 25),
+                              fillColor: Color.fromARGB(255, 10, 23, 25),
                               lineColor:
-                                  const Color.fromARGB(255, 37, 203, 103),
-                              freeColor: const Color.fromARGB(255, 25, 54, 31),
+                                  Color.fromARGB(255, 37, 203, 103),
+                              freeColor: Color.fromARGB(255, 25, 54, 31),
                               lineWidth: 3,
-                              child: const Text(
+                              child: Text(
                                 '68%',
                                 style: TextStyle(
                                   color: Colors.white,

@@ -279,7 +279,7 @@ class _PeopleWidgets extends StatelessWidget {
 
 class _PeopleWidgetsRow extends StatelessWidget {
   final List<Employee> employees;
-  const _PeopleWidgetsRow({super.key, required this.employees});
+  const _PeopleWidgetsRow({required this.employees});
 
   @override
   Widget build(BuildContext context) {
@@ -296,7 +296,7 @@ class _PeopleWidgetsRow extends StatelessWidget {
 
 class _PeopleWidgetsRowItem extends StatelessWidget {
   final Employee employee;
-  const _PeopleWidgetsRowItem({super.key, required this.employee});
+  const _PeopleWidgetsRowItem({required this.employee});
 
   @override
   Widget build(BuildContext context) {

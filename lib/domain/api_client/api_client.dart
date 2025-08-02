@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:themoviedb/domain/entity/movie_details.dart';
 import 'package:themoviedb/domain/entity/popular_movie_response.dart';
+import 'package:themoviedb/domain/entity/popular_tv_show_response.dart';
 
 enum ApiClientExceptionType { network, auth, other, sessionExpired }
 
-enum MediaType { Movie, TV }
+enum MediaType { movie, tv }
 
 extension MediaTypeAsString on MediaType {
   String asString() {
     switch (this) {
-      case MediaType.Movie:
+      case MediaType.movie:
         return 'movie';
-      case MediaType.TV:
+      case MediaType.tv:
         return 'tv';
     }
   }
@@ -140,6 +140,26 @@ class ApiClient {
     return result;
   }
 
+  Future<PopularTVShowResponse> popularTVShow(int page, String locale) async {
+    parser(dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final response = PopularTVShowResponse.fromJson(jsonMap);
+      return response;
+    }
+
+    final result = _get(
+      '/tv/popular',
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'page': page.toString(),
+        'language': locale,
+      },
+    );
+
+    return result;
+  }
+
   Future<PopularMovieResponse> searchMovie(
     int page,
     String locale,
@@ -153,6 +173,32 @@ class ApiClient {
 
     final result = _get(
       '/search/movie',
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'page': page.toString(),
+        'language': locale,
+        'query': query,
+        'include_adult': false.toString(),
+      },
+    );
+
+    return result;
+  }
+
+  Future<PopularTVShowResponse> searchTVShow(
+    int page,
+    String locale,
+    String query,
+  ) async {
+    parser(dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final response = PopularTVShowResponse.fromJson(jsonMap);
+      return response;
+    }
+
+    final result = _get(
+      '/search/tv',
       parser,
       <String, dynamic>{
         'api_key': _apiKey,

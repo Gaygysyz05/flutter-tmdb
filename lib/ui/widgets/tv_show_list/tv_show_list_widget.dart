@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb/domain/api_client/api_client.dart';
 import 'package:themoviedb/library/widgets/inherited/provider.dart';
-import 'package:themoviedb/ui/widgets/movie/movie_list_model.dart';
+import 'package:themoviedb/ui/widgets/tv_show_list/tv_show_list_model.dart';
 
-class MovieListWidget extends StatelessWidget {
-  const MovieListWidget({super.key});
+class TVShowListWidget extends StatelessWidget {
+  const TVShowListWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<MovieListModel>(context);
+    final model = NotifierProvider.watch<TVShowListModel>(context);
     if (model == null) return const SizedBox.shrink();
     return Stack(
       children: [
         ListView.builder(
           padding: const EdgeInsets.only(top: 70),
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          itemCount: model.movies.length,
+          itemCount: model.tvShows.length,
           itemExtent: 150,
           itemBuilder: (BuildContext context, int index) {
-            model.showedMovieAtIndex(index);
-            final movie = model.movies[index];
-            final posterPath = movie.posterPath;
+            model.showedTVShowAtIndex(index);
+            final tvShow = model.tvShows[index];
+            final posterPath = tvShow.posterPath;
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Stack(
@@ -55,20 +55,20 @@ class MovieListWidget extends StatelessWidget {
                             children: [
                               const SizedBox(height: 20),
                               Text(
-                                movie.title,
+                                tvShow.name,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                                 maxLines: 1,
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                model.stringFromDate(movie.releaseDate),
+                                model.stringFromDate(tvShow.firstAirDate),
                                 style: const TextStyle(color: Colors.grey),
                                 maxLines: 1,
                               ),
                               const SizedBox(height: 20),
                               Text(
-                                movie.overview,
+                                tvShow.overview,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -85,7 +85,7 @@ class MovieListWidget extends StatelessWidget {
                     color: Colors.transparent,
                     borderRadius: BorderRadius.circular(10),
                     child: InkWell(
-                      onTap: () => model.onMovieTap(context, index),
+                      onTap: () => {},
                     ),
                   ),
                 ],
@@ -96,7 +96,7 @@ class MovieListWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: TextField(
-            onChanged: model.searchMovie,
+            onChanged: model.searchTVShow,
             decoration: InputDecoration(
                 labelText: 'Search',
                 filled: true,

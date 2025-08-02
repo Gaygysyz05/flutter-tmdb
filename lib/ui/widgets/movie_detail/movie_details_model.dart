@@ -57,7 +57,7 @@ class MovieDetailsModel extends ChangeNotifier {
       await _apiClient.markAsFavorite(
         accountId: accountId,
         sessionId: sessionId,
-        mediaType: MediaType.Movie,
+        mediaType: MediaType.movie,
         mediaId: movieId,
         isFavorite: newFavorite,
       );
