@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:themoviedb/domain/entity/movie_date_parser.dart';
+import 'package:themoviedb/domain/entity/media_date_parser.dart';
 import 'package:themoviedb/domain/entity/movie_details_cast.dart';
 import 'package:themoviedb/domain/entity/movie_details_video.dart';
 

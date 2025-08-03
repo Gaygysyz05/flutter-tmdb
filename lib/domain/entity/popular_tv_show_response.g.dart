@@ -6,19 +6,19 @@ part of 'popular_tv_show_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PopularTVShowResponse _$PopularTVShowResponseFromJson(
+PopularTvShowResponse _$PopularTvShowResponseFromJson(
         Map<String, dynamic> json) =>
-    PopularTVShowResponse(
+    PopularTvShowResponse(
       page: (json['page'] as num).toInt(),
       tvShows: (json['results'] as List<dynamic>)
-          .map((e) => TVShow.fromJson(e as Map<String, dynamic>))
+          .map((e) => TvShow.fromJson(e as Map<String, dynamic>))
           .toList(),
       totalResults: (json['total_results'] as num).toInt(),
       totalPages: (json['total_pages'] as num).toInt(),
     );
 
-Map<String, dynamic> _$PopularTVShowResponseToJson(
-        PopularTVShowResponse instance) =>
+Map<String, dynamic> _$PopularTvShowResponseToJson(
+        PopularTvShowResponse instance) =>
     <String, dynamic>{
       'page': instance.page,
       'results': instance.tvShows.map((e) => e.toJson()).toList(),

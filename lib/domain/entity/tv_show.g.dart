@@ -6,7 +6,7 @@ part of 'tv_show.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TVShow _$TVShowFromJson(Map<String, dynamic> json) => TVShow(
+TvShow _$TvShowFromJson(Map<String, dynamic> json) => TvShow(
       posterPath: json['poster_path'] as String?,
       adult: json['adult'] as bool,
       overview: json['overview'] as String,
@@ -27,7 +27,7 @@ TVShow _$TVShowFromJson(Map<String, dynamic> json) => TVShow(
       voteAverage: (json['vote_average'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$TVShowToJson(TVShow instance) => <String, dynamic>{
+Map<String, dynamic> _$TvShowToJson(TvShow instance) => <String, dynamic>{
       'poster_path': instance.posterPath,
       'adult': instance.adult,
       'overview': instance.overview,

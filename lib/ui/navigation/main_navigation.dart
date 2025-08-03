@@ -7,11 +7,14 @@ import 'package:themoviedb/ui/widgets/main/main_screen_widget.dart';
 import 'package:themoviedb/ui/widgets/movie_detail/movie_details_model.dart';
 import 'package:themoviedb/ui/widgets/movie_detail/movie_details_widget.dart';
 import 'package:themoviedb/ui/widgets/movie_trailer/movie_trailer_widget.dart';
+import 'package:themoviedb/ui/widgets/tv_show_detail/tv_show_details_model.dart';
+import 'package:themoviedb/ui/widgets/tv_show_detail/tv_show_details_widget.dart';
 
 abstract class MainNavigationRoutesNames {
   static const auth = 'auth';
   static const mainScreen = '/';
   static const movieDetails = '/movies_details';
+  static const tvShowDetails = '/tv_show_details';
   static const movieTrailer = '/movies_details/trailer';
 }
 
@@ -39,6 +42,15 @@ class MainNavigation {
           builder: (context) => NotifierProvider(
             create: () => MovieDetailsModel(movieId),
             child: const MovieDetailsWidget(),
+          ),
+        );
+      case MainNavigationRoutesNames.tvShowDetails:
+        final arguments = settings.arguments;
+        final tvShowId = arguments is int ? arguments : 0;
+        return MaterialPageRoute(
+          builder: (context) => NotifierProvider(
+            create: () => TvShowDetailsModel(tvShowId),
+            child: const TvShowDetailsWidget(),
           ),
         );
       case MainNavigationRoutesNames.movieTrailer:

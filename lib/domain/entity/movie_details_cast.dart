@@ -27,10 +27,10 @@ class Actor {
   final String originalName;
   final double popularity;
   final String? profilePath;
-  final int castId;
+  final int? castId;
   final String character;
   final String creditId;
-  final int order;
+  final int? order;
   Actor({
     required this.adult,
     required this.gender,
@@ -57,7 +57,7 @@ class Actor {
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Employee {
   final bool adult;
-  final int gender;
+  final int? gender;
   final int id;
   final String knownForDepartment;
   final String name;

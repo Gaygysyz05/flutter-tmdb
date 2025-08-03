@@ -5,22 +5,22 @@ import 'package:themoviedb/domain/entity/tv_show.dart';
 part 'popular_tv_show_response.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
-class PopularTVShowResponse {
+class PopularTvShowResponse {
   final int page;
   @JsonKey(name: 'results')
-  final List<TVShow> tvShows;
+  final List<TvShow> tvShows;
   final int totalResults;
   final int totalPages;
 
-  PopularTVShowResponse({
+  PopularTvShowResponse({
     required this.page,
     required this.tvShows,
     required this.totalResults,
     required this.totalPages,
   });
 
-  factory PopularTVShowResponse.fromJson(Map<String, dynamic> json) =>
-      _$PopularTVShowResponseFromJson(json);
+  factory PopularTvShowResponse.fromJson(Map<String, dynamic> json) =>
+      _$PopularTvShowResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PopularTVShowResponseToJson(this);
+  Map<String, dynamic> toJson() => _$PopularTvShowResponseToJson(this);
 }

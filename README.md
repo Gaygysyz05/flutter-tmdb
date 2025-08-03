@@ -89,10 +89,13 @@ The app follows clean architecture principles with:
 lib/
 ├── domain/
 │   ├── api_client/          # API communication layer
-│   └── data_provider/   
-├── resources/           # Data provider
+│   └── data_provider/       # Data provider
+│   └── entity/              # Data json
+├── library/             # App provider
+├── resources/           # Image resources
 ├── ui/
 │   ├── elements/            # App elements
+│   ├── navigation/            # App navigation
 │   ├── theme/               # App theming
 │   └── widgets/             # Reusable UI components       
 └── main.dart                # App entry point
@@ -117,9 +120,9 @@ Contributions are welcome! This project is still in development, so there are ma
 - [x] User authentication
 - [x] Movie search and browsing
 - [x] Detailed movie information
+- [x] TV show support
 - [ ] User ratings and reviews
 - [ ] Watchlist functionality
-- [ ] TV show support
 - [ ] Offline capabilities
 
 ## 🐛 Known Issues

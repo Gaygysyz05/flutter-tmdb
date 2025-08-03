@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:themoviedb/domain/entity/movie_date_parser.dart';
+import 'package:themoviedb/domain/entity/media_date_parser.dart';
 
 part 'tv_show.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class TVShow {
+class TvShow {
   final String? posterPath;
   final bool adult;
   final String overview;
@@ -21,7 +21,7 @@ class TVShow {
   final int voteCount;
   final double voteAverage;
 
-  TVShow({
+  TvShow({
     required this.posterPath,
     required this.adult,
     required this.overview,
@@ -38,7 +38,7 @@ class TVShow {
     required this.voteAverage,
   });
 
-  factory TVShow.fromJson(Map<String, dynamic> json) => _$TVShowFromJson(json);
+  factory TvShow.fromJson(Map<String, dynamic> json) => _$TvShowFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TVShowToJson(this);
+  Map<String, dynamic> toJson() => _$TvShowToJson(this);
 }
