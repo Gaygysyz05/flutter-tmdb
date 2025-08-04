@@ -1,79 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:themoviedb/domain/api_client/api_client.dart';
-import 'package:themoviedb/domain/data_provider/session_data_provider.dart';
 import 'package:themoviedb/domain/entity/movie_details.dart';
+import 'package:themoviedb/ui/widgets/media_detail/media_details_model.dart';
 
-class MovieDetailsModel extends ChangeNotifier {
-  final _sessionDataProvider = SessionDataProvider();
-  final _apiClient = ApiClient();
+class MovieDetailsModel extends MediaDetailsModel<MovieDetails> {
+  MovieDetails? get movieDetails => details;
 
-  final int movieId;
-  MovieDetails? _movieDetails;
-  bool _isFavorite = false;
-  String _locale = '';
-  late DateFormat _dateFormat;
-  Future<void>? Function()? onSessionExpired;
+  MovieDetailsModel(super.movieId);
 
-  MovieDetails? get movieDetails => _movieDetails;
-  bool get isFavorite => _isFavorite;
-
-  MovieDetailsModel(this.movieId);
-
-  String stringFromDate(DateTime? date) =>
-      date != null ? _dateFormat.format(date) : 'No release date';
-
-  Future<void> setupLocale(BuildContext context) async {
-    final locale = Localizations.localeOf(context).toLanguageTag();
-    if (_locale == locale) return;
-    _locale = locale;
-    _dateFormat = DateFormat.yMMMMd(locale);
-    await loadDetails();
+  @override
+  Future<MovieDetails> fetchDetailsFromApi(int id, String locale) {
+    return apiClient.movieDetails(id, locale);
   }
 
-  Future<void> loadDetails() async {
-    try {
-      _movieDetails = await _apiClient.movieDetails(movieId, _locale);
-      final sessionId = await _sessionDataProvider.getSessionId();
-      if (sessionId != null) {
-        _isFavorite = await _apiClient.isFavorite(movieId, sessionId);
-      }
-      notifyListeners();
-    } on ApiClientException catch (e) {
-      _handleApiClientException(e);
-    }
+  @override
+  Future<bool> checkFavoriteStatus(int id, String sessionId) {
+    return apiClient.isFavorite(id, sessionId);
   }
 
-  Future<void> toggleFavorite() async {
-    final sessionId = await _sessionDataProvider.getSessionId();
-    final accountId = await _sessionDataProvider.getAccountId();
-
-    if (sessionId == null || accountId == null) return;
-    final newFavorite = !_isFavorite;
-    _isFavorite = newFavorite;
-    notifyListeners();
-
-    try {
-      await _apiClient.markAsFavorite(
-        accountId: accountId,
-        sessionId: sessionId,
-        mediaType: MediaType.movie,
-        mediaId: movieId,
-        isFavorite: newFavorite,
-      );
-    } on ApiClientException catch (e) {
-      _handleApiClientException(e);
-    }
-  }
-
-  void _handleApiClientException(ApiClientException e) {
-    switch (e.type) {
-      case ApiClientExceptionType.sessionExpired:
-        onSessionExpired?.call();
-        break;
-      default:
-        debugPrint('Error: ${e.type}');
-    }
-
-  }
+  @override
+  MediaType getMediaType() => MediaType.movie;
 }

@@ -1,79 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:themoviedb/domain/api_client/api_client.dart';
-import 'package:themoviedb/domain/data_provider/session_data_provider.dart';
 import 'package:themoviedb/domain/entity/tv_show_details.dart';
+import 'package:themoviedb/ui/widgets/media_detail/media_details_model.dart';
 
-class TvShowDetailsModel extends ChangeNotifier {
-  final _sessionDataProvider = SessionDataProvider();
-  final _apiClient = ApiClient();
+class TvShowDetailsModel extends MediaDetailsModel<TvShowDetails> {
+  TvShowDetails? get tvShowDetails => details;
 
-  final int tvShowId;
-  TvShowDetails? _tvShowDetails;
-  bool _isFavorite = false;
-  String _locale = '';
-  late DateFormat _dateFormat;
-  Future<void>? Function()? onSessionExpired;
+  TvShowDetailsModel(super.tvShowId);
 
-  TvShowDetails? get tvShowDetails => _tvShowDetails;
-  bool get isFavorite => _isFavorite;
-
-  TvShowDetailsModel(this.tvShowId);
-
-  String stringFromDate(DateTime? date) =>
-      date != null ? _dateFormat.format(date) : 'No release date';
-
-  Future<void> setupLocale(BuildContext context) async {
-    final locale = Localizations.localeOf(context).toLanguageTag();
-    if (_locale == locale) return;
-    _locale = locale;
-    _dateFormat = DateFormat.yMMMMd(locale);
-    await loadDetails();
+  @override
+  Future<TvShowDetails> fetchDetailsFromApi(int id, String locale) {
+    return apiClient.tvShowDetails(id, locale);
   }
 
-  Future<void> loadDetails() async {
-    try {
-      _tvShowDetails = await _apiClient.tvShowDetails(tvShowId, _locale);
-      final sessionId = await _sessionDataProvider.getSessionId();
-      if (sessionId != null) {
-        _isFavorite = await _apiClient.isFavoriteTvShow(tvShowId, sessionId);
-      }
-      notifyListeners();
-    } on ApiClientException catch (e) {
-      _handleApiClientException(e);
-    }
+  @override
+  Future<bool> checkFavoriteStatus(int id, String sessionId) {
+    return apiClient.isFavoriteTvShow(id, sessionId);
   }
 
-  Future<void> toggleFavorite() async {
-    final sessionId = await _sessionDataProvider.getSessionId();
-    final accountId = await _sessionDataProvider.getAccountId();
-
-    if (sessionId == null || accountId == null) return;
-    final newFavorite = !_isFavorite;
-    _isFavorite = newFavorite;
-    notifyListeners();
-
-    try {
-      await _apiClient.markAsFavorite(
-        accountId: accountId,
-        sessionId: sessionId,
-        mediaType: MediaType.tv,
-        mediaId: tvShowId,
-        isFavorite: newFavorite,
-      );
-    } on ApiClientException catch (e) {
-      _handleApiClientException(e);
-    }
-  }
-
-  void _handleApiClientException(ApiClientException e) {
-    switch (e.type) {
-      case ApiClientExceptionType.sessionExpired:
-        onSessionExpired?.call();
-        break;
-      default:
-        debugPrint('Error: ${e.type}');
-    }
-
-  }
+  @override
+  MediaType getMediaType() => MediaType.tv;
 }

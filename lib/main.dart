@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:themoviedb/library/widgets/inherited/provider.dart';
 import 'package:themoviedb/ui/navigation/main_navigation.dart';
 import 'package:themoviedb/ui/theme/app_colors.dart';
-import 'package:themoviedb/ui/widgets/app/my_app_model.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final model = MyAppModel();
-  await model.checkAuth();
   const app = MyApp();
-  final widget = Provider(model: model, child: app);
-  runApp(widget);
+  runApp(app);
 }
 
 class MyApp extends StatelessWidget {
@@ -20,7 +15,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.read<MyAppModel>(context);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -45,7 +39,7 @@ class MyApp extends StatelessWidget {
       ],
       debugShowCheckedModeBanner: false,
       routes: mainNavigation.routes,
-      initialRoute: mainNavigation.initialRoute(model?.isAuth == true),
+      initialRoute: MainNavigationRoutesNames.loaderWidget,
       onGenerateRoute: mainNavigation.onGenerateRoute,
       onUnknownRoute: (settings) {
         return MaterialPageRoute<void>(
