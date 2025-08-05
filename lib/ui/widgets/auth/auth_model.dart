@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:themoviedb/domain/api_client/api_client.dart';
-import 'package:themoviedb/domain/data_provider/session_data_provider.dart';
+import 'package:themoviedb/domain/service/auth_service.dart';
 import 'package:themoviedb/ui/navigation/main_navigation.dart';
 
-class AuthModel extends ChangeNotifier {
-  final _apiClient = ApiClient();
-  final _sessionDataProvider = SessionDataProvider();
+class AuthViewModel extends ChangeNotifier {
+  final _authService = AuthService();
 
   final loginTextController = TextEditingController();
   final passwordTextController = TextEditingController();
@@ -18,62 +17,55 @@ class AuthModel extends ChangeNotifier {
   bool get canStartAuth => !_isAuthProgress;
   bool get isAuthProgress => _isAuthProgress;
 
-  Future<void> auth(BuildContext context) async {
-    final login = loginTextController.text;
-    final password = passwordTextController.text;
+  bool _isValid(String login, String password) =>
+      login.isNotEmpty && password.isNotEmpty;
 
-    if (login.isEmpty || password.isEmpty) {
-      _errorMessage = 'Invalid username or password';
-      notifyListeners();
-      return;
-    }
-
-    _errorMessage = null;
-    _isAuthProgress = true;
-    notifyListeners();
-    String? sessionId;
-    int? accountId;
-
+  Future<String?> _login(String login, String password) async {
     try {
-      sessionId = await _apiClient.auth(
-        username: login,
-        password: password,
-      );
-      accountId = await _apiClient.getAccountInfo(sessionId);
+      await _authService.login(login, password);
     } on ApiClientException catch (e) {
       switch (e.type) {
         case ApiClientExceptionType.network:
-          _errorMessage = 'The server is not available. Check yout network connection';
-          break;
+          return 'The server is not available. Check yout network connection';
         case ApiClientExceptionType.auth:
-          _errorMessage = 'Invalid login ot password!';
-          break;
+          return 'Invalid login ot password!';
         case ApiClientExceptionType.other:
-          _errorMessage = 'An error occurred. Please try again';   
-          break;
+          return 'An error occurred. Please try again';
         case ApiClientExceptionType.sessionExpired:
           throw UnimplementedError();
       }
     } catch (e) {
-      _errorMessage = 'An error occurred. Please try again';
+      return 'An error occurred. Please try again';
     }
 
-    _isAuthProgress = false;
-    if (_errorMessage != null) {
-      notifyListeners();
+    return null;
+  }
+
+  Future<void> auth(BuildContext context) async {
+    final login = loginTextController.text;
+    final password = passwordTextController.text;
+
+    if (_isValid(login, password)) {
+      _updateState('Invalid username or password', false);
       return;
     }
 
-    if (sessionId == null || accountId == null) {
-      _errorMessage = 'Unknown error, try again.';
-      notifyListeners();
+    _updateState(null, true);
+
+    _errorMessage = await _login(login, password);
+
+    if (_errorMessage == null) {
+      MainNavigation.resetNavigation(context);
+    }
+    _updateState(_errorMessage, false);
+  }
+
+  void _updateState(String? errorMessage, bool isAuthProgress) {
+    if (_errorMessage == errorMessage && _isAuthProgress == _isAuthProgress) {
       return;
     }
-
-    await _sessionDataProvider.setSessionId(sessionId);
-    await _sessionDataProvider.setAccountId(accountId);
-    unawaited(Navigator.of(context)
-        .pushReplacementNamed(MainNavigationRoutesNames.mainScreen));
+    _errorMessage = errorMessage;
+    _isAuthProgress = _isAuthProgress;
+    notifyListeners();
   }
 }
-

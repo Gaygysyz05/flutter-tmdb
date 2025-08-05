@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:themoviedb/library/widgets/inherited/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:themoviedb/ui/theme/button_style.dart';
 import 'package:themoviedb/ui/widgets/auth/auth_model.dart';
 
-class AuthWidget extends StatefulWidget {
+class AuthWidget extends StatelessWidget {
   const AuthWidget({super.key});
 
-  @override
-  State<AuthWidget> createState() => _AuthWidgetState();
-}
-
-class _AuthWidgetState extends State<AuthWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,21 +18,15 @@ class _AuthWidgetState extends State<AuthWidget> {
       ),
       body: ListView(
         children: [
-          const HeaderWidget(),
+           _HeaderWidget(),
         ],
       ),
     );
   }
 }
 
-class HeaderWidget extends StatefulWidget {
-  const HeaderWidget({super.key});
 
-  @override
-  State<HeaderWidget> createState() => _HeaderWidgetState();
-}
-
-class _HeaderWidgetState extends State<HeaderWidget> {
+class _HeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const textStyle = TextStyle(fontSize: 16, color: Colors.black);
@@ -80,7 +69,7 @@ class _FormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.read<AuthModel>(context);
+    final model = context.read<AuthViewModel>();
 
     const textStyle = TextStyle(fontSize: 16, color: Color(0xFF212529));
     const textFieldDecoration = InputDecoration(
@@ -91,7 +80,7 @@ class _FormWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _ErrorMessageWidget(),
+        _ErrorMessageWidget(),
         const SizedBox(
           height: 10,
         ),
@@ -103,7 +92,7 @@ class _FormWidget extends StatelessWidget {
           height: 5,
         ),
         TextField(
-          controller: model?.loginTextController,
+          controller: model.loginTextController,
           decoration: textFieldDecoration,
         ),
         const SizedBox(
@@ -117,7 +106,7 @@ class _FormWidget extends StatelessWidget {
           height: 5,
         ),
         TextField(
-          controller: model?.passwordTextController,
+          controller: model.passwordTextController,
           decoration: textFieldDecoration,
           obscureText: true,
         ),
@@ -144,12 +133,11 @@ class _AuthButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<AuthModel>(context);
+   final model = context.watch<AuthViewModel>();
     const colorButton = Color(0xFF01B4E4);
     final onPressed =
-        model?.canStartAuth == true ? () => model?.auth(context) : null;
-
-    final child = model?.isAuthProgress == true
+        model.canStartAuth == true ? () => model.auth(context) : null;
+    final child = model.isAuthProgress == true
         ? const SizedBox(
             width: 15,
             height: 15,
@@ -173,41 +161,10 @@ class _AuthButtonWidget extends StatelessWidget {
   }
 }
 
-class _ErrorMessageWidget extends StatefulWidget {
-  const _ErrorMessageWidget();
-
-  @override
-  State<_ErrorMessageWidget> createState() => _ErrorMessageWidgetState();
-}
-
-class _ErrorMessageWidgetState extends State<_ErrorMessageWidget> {
-  AuthModel? _model;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final newModel = NotifierProvider.read<AuthModel>(context);
-    if (_model != newModel) {
-      _model?.removeListener(_onModelChanged);
-      _model = newModel;
-      _model?.addListener(_onModelChanged);
-    }
-  }
-
-  @override
-  void dispose() {
-    _model?.removeListener(_onModelChanged);
-    super.dispose();
-  }
-
-  void _onModelChanged() {
-    if (mounted) setState(() {});
-  }
-
+class _ErrorMessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final errorMessage = _model?.errorMessage;
-
+    final errorMessage = context.select((AuthViewModel e) => e.errorMessage);
     if (errorMessage == null) return const SizedBox.shrink();
 
     return Padding(
