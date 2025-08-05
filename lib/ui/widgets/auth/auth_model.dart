@@ -45,7 +45,7 @@ class AuthViewModel extends ChangeNotifier {
     final login = loginTextController.text;
     final password = passwordTextController.text;
 
-    if (_isValid(login, password)) {
+    if (!_isValid(login, password)) {
       _updateState('Invalid username or password', false);
       return;
     }
